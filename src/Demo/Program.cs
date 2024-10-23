@@ -19,6 +19,9 @@ Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Loca
 // This is how you would use the local file system, you can do this to see the output you expect when using blobs
 // xslt.Load("Example/main.xslt.xml", xlstSettings, XmlResolver.FileSystemResolver);
 
+// Note, this syntax tells the XSLT processor to use the AzureBlobXmlResolver to resolve URIs
+// it's only needed here - the XSLT file itself doesn't need to know about the resolver and can just use relative URIs like normal.
+// See the content of Example/main.xslt.xml to see how it just has a relative URI to the included file.
 xslt.Load("azureblob://xmltest/main.xslt.xml", xlstSettings, resolver);
 
 using XmlReader input = XmlReader.Create("Example/books.xml");

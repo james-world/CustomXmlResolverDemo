@@ -5,11 +5,11 @@ using Azure.Storage.Blobs;
 
 public class AzureBlobXmlResolver : XmlResolver
 {
-    private readonly string _connectionString;
+    private readonly BlobServiceClient _blobServiceClient;
 
     public AzureBlobXmlResolver(string connectionString)
     {
-        _connectionString = connectionString;
+        _blobServiceClient = new BlobServiceClient(connectionString);
     }
 
     public override ICredentials Credentials
@@ -35,11 +35,8 @@ public class AzureBlobXmlResolver : XmlResolver
         string containerName = absoluteUri.Host;
         string blobName = absoluteUri.AbsolutePath.TrimStart('/');
 
-        // Create BlobServiceClient using the provided connection string
-        BlobServiceClient blobServiceClient = new BlobServiceClient(_connectionString);
-
         // Get the container client
-        BlobContainerClient containerClient = blobServiceClient.GetBlobContainerClient(containerName);
+        BlobContainerClient containerClient = _blobServiceClient.GetBlobContainerClient(containerName);
 
         // Get the blob client
         BlobClient blobClient = containerClient.GetBlobClient(blobName);

@@ -1,0 +1,8 @@
+services:
+  xsltblobstorage:
+    build:
+      context: ./docker/xslt-blob-storage
+      dockerfile: xlst-blob-storage.Dockerfile
+    restart: on-failure
+    ports:
+      - 10000:10000

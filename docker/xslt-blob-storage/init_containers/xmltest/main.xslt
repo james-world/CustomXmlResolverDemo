@@ -3,7 +3,7 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <!-- Include the common stylesheet -->
-  <xsl:include href="common.xslt.xml"/>
+  <xsl:include href="common.xslt"/>
 
   <!-- Match the root element -->
   <xsl:template match="/catalog">

@@ -7,8 +7,9 @@ using Microsoft.Extensions.Configuration;
 var configuration = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
-
-string connectionString = configuration["AzureBlobXmlResolver:ConnectionString"] ?? throw new Exception("See README.md");
+    
+// Default to using the the local storage emulator if a connection string isn't provided
+string connectionString = configuration["AzureBlobXmlResolver:ConnectionString"] ?? "UseDevelopmentStorage=true"; 
 
 // swap comments to use the caching resolver
 // XmlResolver resolver = new AzureBlobXmlResolver(connectionString);
@@ -20,15 +21,15 @@ Environment.CurrentDirectory = new FileInfo(Assembly.GetExecutingAssembly().Loca
 
 // This is how you would use the local file system, you can do this to see the output you expect when using blobs
 Console.WriteLine("Local file system:");
-TransformFile("Example/books.xml", "Example/main.xslt.xml", XmlResolver.FileSystemResolver, xlstSettings);
+TransformFile("Example/books.xml", "Example/main.xslt", XmlResolver.FileSystemResolver, xlstSettings);
 
 // Note, the azureblob syntax tells the XSLT processor to use the AzureBlobXmlResolver to resolve URIs
 // it's only needed here - the XSLT file itself doesn't need to know about the resolver and can just use relative URIs like normal.
 // See the content of Example/main.xslt.xml to see how it just has a relative URI to the included file.
 Console.WriteLine("Azure Blob Storage:");
-TransformFile("Example/books.xml", "azureblob://xmltest/main.xslt.xml", resolver, xlstSettings);
+TransformFile("Example/books.xml", "azureblob://xmltest/main.xslt", resolver, xlstSettings);
 Console.WriteLine("Cache:");
-TransformFile("Example/books.xml", "azureblob://xmltest/main.xslt.xml", resolver, xlstSettings);
+TransformFile("Example/books.xml", "azureblob://xmltest/main.xslt", resolver, xlstSettings);
 
 // function to transform a file given a resolve and settings
 static void TransformFile(string inputFileName, string baseXsltFile, XmlResolver resolver, XsltSettings settings)
